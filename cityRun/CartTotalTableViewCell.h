@@ -1,0 +1,15 @@
+//
+//  CartTotalTableViewCell.h
+//  cityRun
+//
+//  Created by Basir Alam on 04/04/17.
+//  Copyright © 2017 Basir. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface CartTotalTableViewCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UILabel *lblTitle;
+@property (strong, nonatomic) IBOutlet UILabel *lblAmount;
+
+@end

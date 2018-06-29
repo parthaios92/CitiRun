@@ -1,0 +1,32 @@
+//
+//  CityRun-PrefixHeader.pch
+//  cityRun
+//
+//  Created by Basir Alam on 22/03/17.
+//  Copyright © 2017 Basir. All rights reserved.
+//
+
+#ifndef CityRun_PrefixHeader_pch
+#define CityRun_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "UIViewController+MySettings.h"
+#import "SettingClass.h"
+#import "VSDropdown.h"
+#import "ShadowDrop.h"
+#import "DataFetch.h" //1
+#import <MBProgressHUD/MBProgressHUD.h>
+#import "CartViewController.h"
+#import "SAMTextView.h"
+#import "ACFloatingTextField.h"
+#import "ACFloatingTextFieldFind.h"
+#import "ACFloatingTextFieldOriginal.h"
+
+#import "UIImageView+WebCache.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "AFNetworking.h"
+
+
+#endif /* CityRun_PrefixHeader_pch */
