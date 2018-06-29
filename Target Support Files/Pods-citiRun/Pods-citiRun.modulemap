@@ -1,0 +1,6 @@
+framework module Pods_citiRun {
+  umbrella header "Pods-citiRun-umbrella.h"
+
+  export *
+  module * { export * }
+}
