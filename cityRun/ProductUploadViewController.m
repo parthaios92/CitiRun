@@ -42,7 +42,7 @@
     IBOutlet UIButton *btnAddBulkProduct1;
     IBOutlet UIButton *btnAddProduct2;
     IBOutlet UIButton *btnAddBulkProduct2;
-    NSString* picStr;
+    NSString* picStr,*uploadImageStr;
     NSString *path;
     UIImage *chosenImage;
     IBOutlet UIImageView *pickedImageView;
@@ -52,6 +52,14 @@
     NSData *imagedata;
     DataFetch *_dataFetch;
     BOOL isReload;
+    
+    NSData *pngData;
+    NSData *syncResData;
+    NSMutableURLRequest *request;
+    
+#define URL  @"http://www.appsforcompany.com/citirun/app/upload_image.php"  // change this URL
+#define NO_CONNECTION  @"No Connection"
+#define NO_IMAGE      @"NO IMAGE SELECTED"
     
 }
 @property (nonatomic, strong) UIImage *image;
@@ -66,16 +74,31 @@
     // Do any additional setup after loading the view.
     self.title = @"Add Product";
     
+    txtCategory.delegate = self;
+    txtSubCategory.delegate = self;
+    txtQuantity.delegate = self;
+    txtPrice.delegate = self;
+    
     _dataFetch = [[DataFetch alloc]init];
     _dataFetch.delegate = self;
     
     picStr = @"";
-    [self setBackgroundImage];
+    [self navigationColorSet];
+    [self BackbuttonSet];
     [self setConstantsAndFonts];
     [self allocationOfObjects];
     //    [self setVSDropDown];
     [self setBulkUploadView];
     
+}
+#pragma mark NavigationColor Set
+
+-(void)navigationColorSet{
+    
+    self.navigationItem.hidesBackButton = YES;
+    UINavigationBar *bar = [self.navigationController navigationBar];
+    [bar setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
 }
 
 -(void)setBulkUploadView{
@@ -205,13 +228,19 @@
 }
 
 */
+
 #pragma mark-
 #pragma mark- TextField Delegate
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    if (textField.tag==5 || textField.tag==6) {
-    [self.view setFrame:CGRectMake(0,-250,self.view.frame.size.width,self.view.frame.size.height)];
+    if (textField.tag==5) {
+        
+        [self.view setFrame:CGRectMake(0,-170,self.view.frame.size.width,self.view.frame.size.height)];
+        
+    }else if (textField.tag==6){
+        
+        [self.view setFrame:CGRectMake(0,-190,self.view.frame.size.width,self.view.frame.size.height)];
     }
 }
 
@@ -453,38 +482,52 @@
 }
 
 #pragma mark - Image Picker Delegate -
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     
+    NSLog(@"%@",info);
+    UIImage * img = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    product_Image.image =  img;
+    pngData = [[NSData alloc] init];
+    pngData = UIImagePNGRepresentation(product_Image.image);
+    [self layoutImageView];
+    NSData *webData = UIImagePNGRepresentation(product_Image.image);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *localFilePath = [documentsDirectory stringByAppendingPathComponent:@","];
+    [webData writeToFile:localFilePath atomically:YES];
+    NSLog(@"localFilePath.%@",localFilePath);
+   // lblStoreImageName.text = localFilePath;
+    [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    //      [self dismissViewControllerAnimated:YES completion:nil];
     [self dismissViewControllerAnimated:YES completion:^{
-        self.image = image;
-        TOCropViewController *cropController = [[TOCropViewController alloc] initWithImage:image];
-        cropController.delegate = self;
-        //_defualtImageView.hidden=YES;
-        [self presentViewController:cropController animated:YES completion:nil];
+        
+        [self uploadImage];
     }];
 }
 
 #pragma mark - Cropper Delegate -
-- (void)cropViewController:(TOCropViewController *)cropViewController didCropToImage:(UIImage *)image withRect:(CGRect)cropRect angle:(NSInteger)angle
-{
-    
-    product_Image.image = image;
-    imagedata = UIImageJPEGRepresentation(product_Image.image, 0.5);
-    // NSLog(@"image data%@",imagedata);
-    
-    [self layoutImageView];
-    
-    // self.navigationItem.rightBarButtonItem.enabled = YES;
-    
-    CGRect viewFrame = [self.view convertRect:product_Image.frame toView:self.navigationController.view];
-    product_Image.hidden = YES;
-    [cropViewController dismissAnimatedFromParentViewController:self withCroppedImage:image toFrame:viewFrame completion:^{
-        product_Image.hidden = NO;
-    }];
-    [self uploadImage];
-    
-}
+//- (void)cropViewController:(TOCropViewController *)cropViewController didCropToImage:(UIImage *)image withRect:(CGRect)cropRect angle:(NSInteger)angle
+//{
+//
+//    product_Image.image = image;
+//    imagedata = UIImageJPEGRepresentation(product_Image.image, 0.5);
+//    // NSLog(@"image data%@",imagedata);
+//
+//    [self layoutImageView];
+//
+//    // self.navigationItem.rightBarButtonItem.enabled = YES;
+//
+//    CGRect viewFrame = [self.view convertRect:product_Image.frame toView:self.navigationController.view];
+//    product_Image.hidden = YES;
+//    [cropViewController dismissAnimatedFromParentViewController:self withCroppedImage:image toFrame:viewFrame completion:^{
+//        product_Image.hidden = NO;
+//    }];
+//    [self uploadImage];
+//
+//}
 
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -518,64 +561,101 @@
 
 -(void)uploadImage
 {
-    [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSLog(@"Size of Image(KB):%lu",(unsigned long)[imagedata length] / 1024);
-  
-    
-//    NSString *imagePostUrl = [NSString stringWithFormat:@"http://citiruns.com/citirun/app/upload_image.php"];
-    NSString *imagePostUrl = [NSString stringWithFormat:@"http://www.appsforcompany.com/citirun/app/upload_image.php"];
-    
-    NSString *imageString =  [imagedata base64EncodedStringWithOptions:0];
-    NSError* error;
-    NSDictionary *parameters = @{@"imageName": imageString};
-    NSMutableURLRequest *req=[[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:imagePostUrl parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData)
-                              {
-                                  [formData appendPartWithFileData:imagedata name:@"image" fileName:@"image" mimeType:@"image/jpeg"];
-                              }error:&error];
     
     
-    AFHTTPRequestOperation *op = [manager HTTPRequestOperationWithRequest:req success: ^(AFHTTPRequestOperation *operation, id responseObject) {
-        // NSLog(@"response: %@", responseObject);
-        self.view.userInteractionEnabled = YES;
-        [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
+    if(pngData != nil){
         
-        //  NSError* error;
-        NSString *convertedString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSLog(@"string: %@",convertedString);
         
-        // NSLog(@"dic: %@",json);
+        request = [NSMutableURLRequest new];
+        request.timeoutInterval = 20.0;
+        [request setURL:[NSURL URLWithString:URL]];
+        [request setHTTPMethod:@"POST"];
         
-        NSRange result1 = [convertedString rangeOfString:@".jpg"];
-        if (result1.length>0) {
-//            picStr=[NSString stringWithFormat:@"http://citiruns.com/citirun/app/%@",convertedString];
-            picStr=[NSString stringWithFormat:@"http://www.appsforcompany.com/citirun/app/%@",convertedString];
-            NSLog(@"%@",picStr);
-            [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
+        NSString *boundary = @"---------------------------14737809831466499882746641449";
+        NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
+        [request addValue:contentType forHTTPHeaderField: @"Content-Type"];
+        [request setValue:@"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" forHTTPHeaderField:@"Accept"];
+        [request setValue:@"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/536.26.14 (KHTML, like Gecko) Version/6.0.1 Safari/536.26.14" forHTTPHeaderField:@"User-Agent"];
+        
+        NSMutableData *body = [NSMutableData data];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", @"file"] dataUsingEncoding:NSUTF8StringEncoding]]; //%@.png\"\r\n
+        
+        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [body appendData:[NSData dataWithData:pngData]];
+        
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        
+        [request setHTTPBody:body];
+        [request addValue:[NSString stringWithFormat:@"%lu", (unsigned long)[body length]] forHTTPHeaderField:@"Content-Length"];
+        
+        //========
+        
+        NSError *error = nil;
+        NSURLResponse *responseStr = nil;
+        syncResData = [NSURLConnection sendSynchronousRequest:request returningResponse:&responseStr error:&error];
+        NSString *returnString = [[NSString alloc] initWithData:syncResData encoding:NSUTF8StringEncoding];
+        
+        
+        NSLog(@"ERROR %@", error);
+        NSLog(@"RES %@", responseStr);
+        NSLog(@"%@", syncResData);
+        
+        if(error == nil){
             
-            //Setting message of toast
-            [self.view makeToast:@"Image uploaded successfully."
-                        duration:3.0
-                        position:CSToastPositionCenter];
+            [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
+            // response.text = returnString;
+            NSLog(@"%@",returnString);
+            
+            NSArray *items = [returnString componentsSeparatedByString:@","];
+            NSString *str1=[items objectAtIndex:0];
+            //take the one array for split the string
+            NSArray *items1 = [str1 componentsSeparatedByString:@"{"];
+            NSString *str2=[items1 objectAtIndex:1];
+            
+            //take the Message String Only
+            NSArray *items2 = [str2 componentsSeparatedByString:@":"];
+            NSString *str3=[items2 objectAtIndex:1];
+            
+            NSLog(@"%@",str1);
+            NSLog(@"%@",str2);
+            NSLog(@"%@",str3);
+            
+            //Remove String Double Coutetion "".....
+            NSCharacterSet *quoteCharset = [NSCharacterSet characterSetWithCharactersInString:@"\""];
+            NSString *trimmedString = [str3 stringByTrimmingCharactersInSet:quoteCharset];
+            
+            NSLog(@"%@",trimmedString);
+            
+            picStr = trimmedString;
+            NSLog(@"%@",picStr);
+            
+            
         }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-          NSLog(@"Error: %@", error);
+        //=======
+        // return TRUE;
         
-        self.view.userInteractionEnabled = YES;
+    }else{
         
-        picStr = @"";
-        self.view.userInteractionEnabled = YES;
-        picStr = @"";
-        product_Image.image = [UIImage imageNamed:@"add-product-icon.png"];
-        [self setAlertMessage:@"Error!" :@"Can not upload image please try after sometime"];
-        self.view.userInteractionEnabled = YES;
         [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
         
-    }];
-    op.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [[NSOperationQueue mainQueue] addOperation:op];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Alert .. " message:@"Image does not uploaded...,try  again.." preferredStyle:UIAlertControllerStyleAlert];
+        
+        
+        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:nil];
+        [alertController addAction:ok];
+        
+        //        [HUD hideUIBlockingIndicator];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+    }
     
 }
 

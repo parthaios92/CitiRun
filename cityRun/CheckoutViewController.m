@@ -135,6 +135,7 @@
 #pragma mark - Setup PayPal
 
 -(void)setupPayPal{
+    
     _configuration = [[PayPalConfiguration alloc]init];
     _configuration.acceptCreditCards = YES;
     _configuration.merchantName = @"citiRunn Seller";
@@ -330,7 +331,7 @@
         
         [self addAlertSubviewToCenter];
         
-        //        [self setAlertMessage:@"Success!" :@"Product successfully added to your shopping cart."];
+        //  [self setAlertMessage:@"Success!" :@"Product successfully added to your shopping cart."];
     }
     
 }

@@ -46,10 +46,13 @@
     _dataFetch = [[DataFetch alloc]init];
     _dataFetch.delegate = self;
     
+    [self BackbuttonSet];
     
     //NSLog(@"%@",_menuDetailsArray);
     
-    [menuDetailsImage sd_setImageWithURL:[NSURL URLWithString:[_menuDetailsArray valueForKey:@"image"]]];
+    NSString *imageAttached = [NSString stringWithFormat: @"http://www.appsforcompany.com/citirun/app/uploads/%@", [_menuDetailsArray valueForKey:@"image"]];
+    
+    [menuDetailsImage sd_setImageWithURL:[NSURL URLWithString:imageAttached]];
     lblDetailsMenuName.text = [_menuDetailsArray valueForKey:@"productname"];
     txtViewMenuDetails.text = [_menuDetailsArray valueForKey:@"description"];
     lblDetailsMenuPrice.text = [NSString stringWithFormat: @"$%@", [_menuDetailsArray valueForKey:@"price"]];
@@ -62,6 +65,8 @@
 }
 
 -(void)navigationSet{
+    
+     self.navigationItem.hidesBackButton = YES;
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
                                                   forBarMetrics:UIBarMetricsDefault];

@@ -35,6 +35,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:checkCount forKey:@"preferenceName"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    [self BackbuttonSet];
     
     newMenuTableView.delegate = self;
     newMenuTableView.dataSource = self;
@@ -48,10 +49,9 @@
 }
 - (void)viewWillAppear:(BOOL)animated{
     
-    
 //    NSLog(@"%@",[[NSUserDefaults standardUserDefaults]
 //                 stringForKey:@"preferenceName"]);
-//
+
     
     if ([[[NSUserDefaults standardUserDefaults]
           stringForKey:@"preferenceName"] isEqualToString: @"0"]){
@@ -84,6 +84,8 @@
 #pragma mark NavigationColor Set
 
 -(void)navigationColorSet{
+    
+     self.navigationItem.hidesBackButton = YES;
     
     [self.navigationController.navigationBar setBackgroundImage:nil
                                                   forBarMetrics:UIBarMetricsDefault];
@@ -124,14 +126,18 @@
     //    cell.cellView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     //    cell.cellView.layer.borderWidth = 1;
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [cell.menuImage sd_setImageWithURL:[NSURL URLWithString:[[restaurantMenuArray objectAtIndex:indexPath.row] valueForKey:@"image"]]];
+    NSString *imageAttached = [NSString stringWithFormat: @"http://www.appsforcompany.com/citirun/app/uploads/%@", [[restaurantMenuArray objectAtIndex:indexPath.row] valueForKey:@"image"]];
+    
+    [cell.menuImage sd_setImageWithURL:[NSURL URLWithString:imageAttached]]; //http://www.appsforcompany.com/citirun/app/uploads/
     cell.lblMenuName.text = [[restaurantMenuArray objectAtIndex:indexPath.row] valueForKey:@"productname"];
     cell.lblMenuPrice.text = [NSString stringWithFormat:@"$%@", [[restaurantMenuArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
     
     return cell;
     
 }
+
 #pragma mark - UITableViewDelegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -143,7 +149,15 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 120;
+    if (IS_IPAD){
+        
+        return 200;
+        
+    }else{
+        
+        return 120;
+    }
+    
 }
 
 #pragma mark - Process Successful

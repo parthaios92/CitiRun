@@ -12,6 +12,7 @@
 #import "CartViewController.h"
 @interface GMapViewController ()<CLLocationManagerDelegate,ProcessDataDelegate,GMSMapViewDelegate>
 {
+    
     IBOutlet GMSMapView *gMapView;
     CLLocationManager *locationManager;
     IBOutlet UIView *listView;
@@ -41,7 +42,6 @@
     NSInteger productPriceInt;
     NSString* productID;
     
-    
 }
 @property (strong, nonatomic) PayPalConfiguration *configuration;
 @end
@@ -54,7 +54,6 @@
     
     _dataFetch = [[DataFetch alloc]init];
     _dataFetch.delegate = self;
-    
     
     if (IS_IPAD) {
         listViewBG.image = [UIImage imageNamed:@"tab-bg.jpg"];
@@ -70,7 +69,6 @@
     
     latArray = [[_dataDic objectForKey:@"data"] valueForKey:@"lat"];
     lngArray = [[_dataDic objectForKey:@"data"] valueForKey:@"lng"];
-    
     
     //    for (int i=0; i<[[[_dataDic objectForKey:@"data"] valueForKey:@"store_name"] count]; i++) {
     //        latArray = [[_dataDic objectForKey:@"data"] valueForKey:@"lat"];
@@ -88,6 +86,7 @@
 }
 
 -(void)setupPayPal{
+    
     _configuration = [[PayPalConfiguration alloc]init];
     _configuration.acceptCreditCards = YES;
     _configuration.merchantName = @"MASC seller";
@@ -98,6 +97,7 @@
     NSLog(@"Pay Pal SDK = %@",[PayPalMobile libraryVersion]);
 }
 - (void)getCurrentLocation{
+    
     CLLocationCoordinate2D coordinate = [self getLocation];
     NSString *latitude = [NSString stringWithFormat:@"%f", coordinate.latitude];
     NSString *longitude = [NSString stringWithFormat:@"%f", coordinate.longitude];
@@ -118,6 +118,7 @@
     CLLocation *location = [locationManager location];
     CLLocationCoordinate2D coordinate = [location coordinate];
     return coordinate;
+    
 }
 
 -(void)ShowCurrentAddressDetails :  (double) GetCurrentLat  : (double) GetcurrentLong{
@@ -177,6 +178,7 @@
     productPrice.text = [NSString stringWithFormat:@"$%@",[marker.userData valueForKey:@"price"]];
 
 }
+
 /*
  -(void)ShowCurrentAddressDetails :  (double) GetCurrentLat  : (double) GetcurrentLong{
  
@@ -203,6 +205,7 @@
  
  }
  */
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -212,18 +215,19 @@
     return [[[_dataDic objectForKey:@"data"] valueForKey:@"id"] count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     ProductListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProductListTableViewCell" forIndexPath:indexPath];
     cell.backgroundColor = cell.contentView.backgroundColor;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.btnViewDetails.tag = indexPath.row;
     [cell.btnViewDetails addTarget:self action:@selector(viewDetailsMethod:) forControlEvents:UIControlEventTouchUpInside];
 
-    
     cell.lblStoreName.text = [[[_dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"store_name"];
     cell.lblStartingFrom.text = [NSString stringWithFormat:@"$%@ (%@)",[[[_dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"price"],[[[_dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"quantity"]];
     cell.lblStoreDistance.text = [[[_dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"distance"];
     
     return cell;
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -265,9 +269,15 @@
 
 - (IBAction)btnListViewAction:(id)sender {
     //    [gMapView removeFromSuperview];
-    btnMap.backgroundColor = [UIColor colorWithRed:60.0f/255.0f green:173.0f/255.0f blue:139.0f/255.0f alpha:1];
     
-    btnList.backgroundColor = [UIColor colorWithRed:41.0f/255.0f green:118.0f/255.0f blue:95.0f/255.0f alpha:1];
+//    btnMap.backgroundColor = [UIColor colorWithRed:60.0f/255.0f green:173.0f/255.0f blue:139.0f/255.0f alpha:1];
+//    btnList.backgroundColor = [UIColor colorWithRed:41.0f/255.0f green:118.0f/255.0f blue:95.0f/255.0f alpha:1];
+    
+    [btnList setBackgroundColor:[UIColor whiteColor]];
+    [btnList setTitleColor: [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]forState:UIControlStateNormal];
+    [btnMap setBackgroundColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]];
+    [btnMap setTitleColor: [UIColor whiteColor]forState:UIControlStateNormal];
+    
     
     [gMapView setHidden:YES];
     [listView setFrame:CGRectMake(0,64+54,self.view.frame.size.width,self.view.frame.size.height-(64+54+37))];
@@ -278,9 +288,14 @@
     
 }
 - (IBAction)btnMapViewAction:(id)sender {
-    btnMap.backgroundColor = [UIColor colorWithRed:41.0f/255.0f green:118.0f/255.0f blue:95.0f/255.0f alpha:1];
     
-    btnList.backgroundColor = [UIColor colorWithRed:60.0f/255.0f green:173.0f/255.0f blue:139.0f/255.0f alpha:1];
+//    btnMap.backgroundColor = [UIColor colorWithRed:41.0f/255.0f green:118.0f/255.0f blue:95.0f/255.0f alpha:1];
+//    btnList.backgroundColor = [UIColor colorWithRed:60.0f/255.0f green:173.0f/255.0f blue:139.0f/255.0f alpha:1];
+    
+    [btnMap setBackgroundColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]];
+    [btnMap setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btnList setBackgroundColor:[UIColor whiteColor]];
+    [btnList setTitleColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0] forState:UIControlStateNormal];
     
     [listView removeFromSuperview];
     [gMapView setHidden:NO];

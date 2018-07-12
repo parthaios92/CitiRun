@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIViewController (MySettings)
+-(void)BackbuttonSet;
 -(void)setBackgroundImage;
 -(void)setAlertMessage :(NSString *)titel :(NSString *)message;
 - (BOOL)validateEmailWithString:(NSString*)checkString;

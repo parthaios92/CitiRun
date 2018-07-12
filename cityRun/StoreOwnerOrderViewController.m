@@ -69,12 +69,17 @@
     _dataFetch.delegate = self;
     
     [self setRefreshController];
-    [self setBackgroundImage];
+    //[self setBackgroundImage];
+    
     [self hamburgerMenuSetup];
     [self fetchOrderData];
 
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [self navigationColorSet];
+}
 
 -(void)setAnonymousUser{
     NSDictionary *loginDic = @{@"user_id":@"anonymous"
@@ -82,6 +87,17 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:loginDic forKey:@"loginDetails"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark NavigationColor Set
+
+-(void)navigationColorSet{
+    
+    self.navigationItem.hidesBackButton = YES;
+    
+    UINavigationBar *bar = [self.navigationController navigationBar];
+    [bar setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 }
 
 
@@ -98,7 +114,7 @@
 
 -(void)hamburgerMenuSetup{
     
-    imagesArray=[NSMutableArray arrayWithObjects:@"ico-username.png",@"ico_plus_circle.png",@"ico-view-order.png",@"ico-change-ps.png",@"ico-mail.png",@"ico-power.png", nil];
+    imagesArray=[NSMutableArray arrayWithObjects:@"ico-username.png",@"addproduct.png",@"ico-view-order.png",@"pas.png",@"ico-mail.png",@"ico-power.png", nil];
     
     titleArray=[[NSMutableArray alloc]initWithObjects:@"Store Profile",@"Add Product",@"My Product",@"Change Password",@"Contact us",@"Logout",nil];
     
@@ -369,9 +385,10 @@
     isNew = YES;
     selectedTab = @"new_order";
 
-    [btnOrderCompleted setBackgroundImage:nil forState:UIControlStateNormal];
-    [btnNewOrder setBackgroundImage:[UIImage imageNamed:@"btn-active.jpg"] forState:UIControlStateNormal];
-    btnOrderCompleted.backgroundColor = [UIColor colorWithRed:60/256.0 green:173/256.0 blue:139/256.0 alpha:1.0];
+    [btnNewOrder setBackgroundColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]];
+    [btnNewOrder setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btnOrderCompleted setBackgroundColor:[UIColor whiteColor]];
+    [btnOrderCompleted setTitleColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0] forState:UIControlStateNormal];
 
     [self fetchOrderData];
 
@@ -385,9 +402,10 @@
     
     selectedTab = @"order_completed";
 
-    [btnNewOrder setBackgroundImage:nil forState:UIControlStateNormal];
-    [btnOrderCompleted setBackgroundImage:[UIImage imageNamed:@"btn-active.jpg"] forState:UIControlStateNormal];
-    btnNewOrder.backgroundColor = [UIColor colorWithRed:60/256.0 green:173/256.0 blue:139/256.0 alpha:1.0];
+    [btnNewOrder setBackgroundColor:[UIColor whiteColor]];
+    [btnNewOrder setTitleColor: [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]forState:UIControlStateNormal];
+    [btnOrderCompleted setBackgroundColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]];
+    [btnOrderCompleted setTitleColor: [UIColor whiteColor]forState:UIControlStateNormal];
  
     [orderTable reloadData];
 

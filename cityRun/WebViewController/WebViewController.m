@@ -23,6 +23,7 @@
     NSLog(@"From: %@",_from);
     self.title = _from;
     [self navigationColorSet];
+    [self BackbuttonSet];
 
     if ([_from isEqual:@"About citiRunn"]) {
         
@@ -48,6 +49,7 @@
 
 -(void)navigationColorSet{
     
+     self.navigationItem.hidesBackButton = YES;
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];

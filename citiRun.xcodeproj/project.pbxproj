@@ -10,6 +10,9 @@
 		30431E9C060E2F794197B0F0 /* Pods_citiRun.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A48A07320E363CC0066B38D /* Pods_citiRun.framework */; };
 		7A08299020D253350092F8C2 /* arr.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A08298F20D253350092F8C2 /* arr.png */; };
 		7A08299220D2603E0092F8C2 /* cart (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 7A08299120D2603D0092F8C2 /* cart (1).png */; };
+		7A0A958C20EA2BDA00EFC56B /* Gmail.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A958B20EA2BDA00EFC56B /* Gmail.png */; };
+		7A0A958E20EA2BEB00EFC56B /* fb-login-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A958D20EA2BEB00EFC56B /* fb-login-btn.png */; };
+		7A0A959020EA444500EFC56B /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A958F20EA444400EFC56B /* credentials.plist */; };
 		7A0AEB4020D8F60000BB9E59 /* login_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0AEB3E20D8F5FE00BB9E59 /* login_icon.png */; };
 		7A0AEB4120D8F60000BB9E59 /* signup.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0AEB3F20D8F5FF00BB9E59 /* signup.png */; };
 		7A2435B120D3D1420079E5B7 /* product-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A2435B020D3D1410079E5B7 /* product-bg.png */; };
@@ -18,6 +21,12 @@
 		7A8820D320D7CB16005CF83D /* NewCartController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8820D220D7CB16005CF83D /* NewCartController.m */; };
 		7A8820D720D7D123005CF83D /* NewMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8820D620D7D123005CF83D /* NewMenuController.m */; };
 		7A8820DA20D7E883005CF83D /* NewMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8820D920D7E883005CF83D /* NewMenuCell.m */; };
+		7ACAC3EE20ECD72500496DB9 /* ico-power.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ACAC3E920ECD71F00496DB9 /* ico-power.png */; };
+		7ACAC3EF20ECD72500496DB9 /* ico-view-order.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ACAC3EA20ECD72000496DB9 /* ico-view-order.png */; };
+		7ACAC3F020ECD72500496DB9 /* addproduct.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ACAC3EB20ECD72200496DB9 /* addproduct.png */; };
+		7ACAC3F120ECD72500496DB9 /* ico-change-ps.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ACAC3EC20ECD72200496DB9 /* ico-change-ps.png */; };
+		7ACAC3F220ECD72500496DB9 /* pas.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ACAC3ED20ECD72400496DB9 /* pas.png */; };
+		7ACAC3F420ECE68000496DB9 /* icon_secure.png in Resources */ = {isa = PBXBuildFile; fileRef = 7ACAC3F320ECE67F00496DB9 /* icon_secure.png */; };
 		8F2378D520BFDCC300C4F215 /* e_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2378D420BFDCC300C4F215 /* e_logo.png */; };
 		8F2378D720BFE4E900C4F215 /* main_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2378D620BFE4E900C4F215 /* main_bg.png */; };
 		8F40B60D20C6C556002BD68C /* RestaurantListingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F40B60C20C6C556002BD68C /* RestaurantListingViewController.m */; };
@@ -154,6 +163,9 @@
 		79D2BB9C173B280A0A09E215 /* Pods-citiRun.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-citiRun.debug.xcconfig"; path = "Pods/Target Support Files/Pods-citiRun/Pods-citiRun.debug.xcconfig"; sourceTree = "<group>"; };
 		7A08298F20D253350092F8C2 /* arr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arr.png; sourceTree = "<group>"; };
 		7A08299120D2603D0092F8C2 /* cart (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cart (1).png"; sourceTree = "<group>"; };
+		7A0A958B20EA2BDA00EFC56B /* Gmail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gmail.png; sourceTree = "<group>"; };
+		7A0A958D20EA2BEB00EFC56B /* fb-login-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fb-login-btn.png"; sourceTree = "<group>"; };
+		7A0A958F20EA444400EFC56B /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		7A0AEB3E20D8F5FE00BB9E59 /* login_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_icon.png; sourceTree = "<group>"; };
 		7A0AEB3F20D8F5FF00BB9E59 /* signup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = signup.png; sourceTree = "<group>"; };
 		7A2435B020D3D1410079E5B7 /* product-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "product-bg.png"; sourceTree = "<group>"; };
@@ -167,6 +179,12 @@
 		7A8820D620D7D123005CF83D /* NewMenuController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewMenuController.m; sourceTree = "<group>"; };
 		7A8820D820D7E883005CF83D /* NewMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewMenuCell.h; sourceTree = "<group>"; };
 		7A8820D920D7E883005CF83D /* NewMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewMenuCell.m; sourceTree = "<group>"; };
+		7ACAC3E920ECD71F00496DB9 /* ico-power.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ico-power.png"; sourceTree = "<group>"; };
+		7ACAC3EA20ECD72000496DB9 /* ico-view-order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ico-view-order.png"; sourceTree = "<group>"; };
+		7ACAC3EB20ECD72200496DB9 /* addproduct.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addproduct.png; sourceTree = "<group>"; };
+		7ACAC3EC20ECD72200496DB9 /* ico-change-ps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ico-change-ps.png"; sourceTree = "<group>"; };
+		7ACAC3ED20ECD72400496DB9 /* pas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pas.png; sourceTree = "<group>"; };
+		7ACAC3F320ECE67F00496DB9 /* icon_secure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_secure.png; sourceTree = "<group>"; };
 		8F2378D120BFDAC700C4F215 /* HomeViewControllerNew.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewControllerNew.h; sourceTree = "<group>"; };
 		8F2378D220BFDAC700C4F215 /* HomeViewControllerNew.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewControllerNew.m; sourceTree = "<group>"; };
 		8F2378D420BFDCC300C4F215 /* e_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = e_logo.png; sourceTree = "<group>"; };
@@ -376,6 +394,14 @@
 		7A08298820D23C600092F8C2 /* New Image */ = {
 			isa = PBXGroup;
 			children = (
+				7ACAC3F320ECE67F00496DB9 /* icon_secure.png */,
+				7ACAC3EB20ECD72200496DB9 /* addproduct.png */,
+				7ACAC3EC20ECD72200496DB9 /* ico-change-ps.png */,
+				7ACAC3E920ECD71F00496DB9 /* ico-power.png */,
+				7ACAC3EA20ECD72000496DB9 /* ico-view-order.png */,
+				7ACAC3ED20ECD72400496DB9 /* pas.png */,
+				7A0A958D20EA2BEB00EFC56B /* fb-login-btn.png */,
+				7A0A958B20EA2BDA00EFC56B /* Gmail.png */,
 				7A0AEB3E20D8F5FE00BB9E59 /* login_icon.png */,
 				7A0AEB3F20D8F5FF00BB9E59 /* signup.png */,
 				7A2435B020D3D1410079E5B7 /* product-bg.png */,
@@ -556,6 +582,7 @@
 				AA9C3ED71E94DF6F006E6F66 /* StoreOwner */,
 				AA9C3ED61E94DF68006E6F66 /* User */,
 				AA26F3771E7811CA00CCB039 /* Assets.xcassets */,
+				7A0A958F20EA444400EFC56B /* credentials.plist */,
 				AA26F37C1E7811CA00CCB039 /* Info.plist */,
 				AA26F36B1E7811CA00CCB039 /* Supporting Files */,
 			);
@@ -1040,6 +1067,7 @@
 				AAA84C5A1E84024A0065986E /* ico-map-store-location.png in Resources */,
 				AA2176321EA4B05700E19E97 /* ico-mail.png in Resources */,
 				AA49E2EA1E9E4164009C31E1 /* top-bar-logo.png in Resources */,
+				7A0A958C20EA2BDA00EFC56B /* Gmail.png in Resources */,
 				8F2378D720BFE4E900C4F215 /* main_bg.png in Resources */,
 				AA3B4F4F1EAA3E87001EC290 /* btn-browse.png in Resources */,
 				AA7E2E2E1E962EEC0025486C /* btnDelete.png in Resources */,
@@ -1047,13 +1075,16 @@
 				AAA84C531E84024A0065986E /* app-bg.jpg in Resources */,
 				AAA84C5C1E84024A0065986E /* ico-meal.png in Resources */,
 				AA26F37B1E7811CA00CCB039 /* LaunchScreen.storyboard in Resources */,
+				7ACAC3F020ECD72500496DB9 /* addproduct.png in Resources */,
 				8FDEDA6D20C54C7E008C77F9 /* Roboto-Light.ttf in Resources */,
+				7ACAC3F220ECD72500496DB9 /* pas.png in Resources */,
 				AA2B14B51E9D07D900DD5485 /* stars-4.png in Resources */,
 				AA3B4F521EAA3E87001EC290 /* ico-nav-location.png in Resources */,
 				7A0AEB4020D8F60000BB9E59 /* login_icon.png in Resources */,
 				AAA84C5B1E84024A0065986E /* ico-map-user-location.png in Resources */,
 				8FDEDA7120C57335008C77F9 /* normal-bg.png in Resources */,
 				AA49E2F11E9E4F72009C31E1 /* logo.png in Resources */,
+				7ACAC3EF20ECD72500496DB9 /* ico-view-order.png in Resources */,
 				8FDEDA6820C52FAB008C77F9 /* home_menu.png in Resources */,
 				AA3B4F531EAA3E87001EC290 /* ico-notification.png in Resources */,
 				AA5AF4951EA5EC7700C63D0B /* Delivery Car.png in Resources */,
@@ -1082,16 +1113,20 @@
 				AA3B4F551EAA3E87001EC290 /* ico-view-order.png in Resources */,
 				AA2176311EA4B05700E19E97 /* ico-address.png in Resources */,
 				AA273AAA1E82C3C00006DBF9 /* btnDropDownBG.png in Resources */,
+				7A0A958E20EA2BEB00EFC56B /* fb-login-btn.png in Resources */,
 				AAA84C5E1E84024A0065986E /* ico-vegan.png in Resources */,
 				8FDEDA6220C52CBE008C77F9 /* sponcer-logo.png in Resources */,
 				AA3B4F511EAA3E87001EC290 /* ico-change-ps.png in Resources */,
 				7A08299020D253350092F8C2 /* arr.png in Resources */,
+				7ACAC3F420ECE68000496DB9 /* icon_secure.png in Resources */,
 				AAAEFB411E8D232F008A0D63 /* cart_temp.png in Resources */,
 				AA7301E01EB2184700E34347 /* ico_plus_circle.png in Resources */,
 				AAA84C541E84024A0065986E /* ico-back.png in Resources */,
 				AA2C38311EC31BBE006836C2 /* add-product-plus-ico.png in Resources */,
 				AA2C38351EC354A5006836C2 /* add-product-icon.png in Resources */,
+				7A0A959020EA444500EFC56B /* credentials.plist in Resources */,
 				AA2B14B31E9D07D900DD5485 /* stars-2.png in Resources */,
+				7ACAC3EE20ECD72500496DB9 /* ico-power.png in Resources */,
 				AA21762B1EA4A56800E19E97 /* login-logo-icon.png in Resources */,
 				8FDEDA6420C52F3D008C77F9 /* home_btn.png in Resources */,
 				AA7301E61EB2278600E34347 /* ico_pwd.png in Resources */,
@@ -1108,6 +1143,7 @@
 				7A2435B120D3D1420079E5B7 /* product-bg.png in Resources */,
 				AA1A38461E97B112003B4ACD /* pujaLocation.csv in Resources */,
 				8FDEDA6720C52FAB008C77F9 /* home_cart.png in Resources */,
+				7ACAC3F120ECD72500496DB9 /* ico-change-ps.png in Resources */,
 				AA2B14B41E9D07D900DD5485 /* stars-3.png in Resources */,
 				AA6313281E88FB6300F3EC70 /* hamburger-nav.png in Resources */,
 				AA26F3761E7811CA00CCB039 /* Main.storyboard in Resources */,
@@ -1126,11 +1162,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-citiRun/Pods-citiRun-resources.sh",
+				"${PODS_ROOT}/Facebook-iOS-SDK/FacebookSDKs-iOS-universal-4.34.0/iOS/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1163,12 +1203,20 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-citiRun/Pods-citiRun-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);

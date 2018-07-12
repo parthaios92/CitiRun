@@ -10,4 +10,7 @@
 
 @interface RestaurantListingViewController : UIViewController
 
+
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+
 @end

@@ -12,6 +12,7 @@ target 'citiRun' do
   pod 'MBProgressHUD', '~> 1.1'
   pod 'SDWebImage', '~> 4.0'
   pod 'AFNetworking', '~> 2.6'
-  #pod 'FBSDKLoginKit'
+  pod 'Facebook-iOS-SDK', '~> 4.34'
+  pod 'GoogleSignIn'
 
 end

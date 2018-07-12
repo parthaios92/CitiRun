@@ -30,8 +30,21 @@
     
 //    NSLog(@"%@",self.restDetailsArray);
 //    NSLog(@"%@",[self.restDetailsArray valueForKey:@"image"]);
+    [self BackbuttonSet];
     
-    [detailsStoreImage sd_setImageWithURL:[NSURL URLWithString:[self.restDetailsArray valueForKey:@"image"]]];
+    NSString *imageAttached = [NSString stringWithFormat: @"http://www.appsforcompany.com/citirun/app/uploads/%@", [self.restDetailsArray valueForKey:@"image"]];
+    
+//    if ([[self.restDetailsArray valueForKey:@"image"] isEqualToString:@"http://www.appsforcompany.com/citirun/app/image/"]){
+//
+//        NSLog(@"Attached");
+//
+//    }else{
+//
+//          NSLog(@"Not Attached");
+//    }
+    
+    
+    [detailsStoreImage sd_setImageWithURL:[NSURL URLWithString:imageAttached]];
     
     if ([[self.restDetailsArray valueForKey:@"distance"] isEqual:[NSNull null]]){
         
@@ -46,8 +59,6 @@
     lblStoreName.text = [self.restDetailsArray valueForKey:@"store_name"];
     detailsTxtView.text = [self.restDetailsArray valueForKey:@"details"];
     
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -57,6 +68,8 @@
 }
 
 -(void)navigationSet{
+    
+    self.navigationItem.hidesBackButton = YES;
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
                                                   forBarMetrics:UIBarMetricsDefault];

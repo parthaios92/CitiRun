@@ -10,8 +10,13 @@
 #import "ACFloatingTextField.h"
 #import "SignupViewController.h"
 #import "StoreOwnerOrderViewController.h"
-@interface LoginViewController ()<ProcessDataDelegate>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <GoogleSignIn/GoogleSignIn.h>
+
+@interface LoginViewController ()<ProcessDataDelegate,GIDSignInDelegate,GIDSignInUIDelegate>
 {
+    
     __weak IBOutlet NSLayoutConstraint *logoHeghtLayout;
     IBOutlet NSLayoutConstraint *logoWeightLayout;
     IBOutlet ACFloatingTextField *txtEmail;
@@ -20,6 +25,8 @@
     //    Create object of DataFetch
     DataFetch *_dataFetch;
     IBOutlet NSLayoutConstraint *textFieldWidthLayout;
+    
+    NSString *fbID,*fbName,*fbEmail;
 
 }
 @end
@@ -29,14 +36,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        // User is logged in, do work such as go to next view controller.
+    }
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
 
     self.title = @"Login";
-    //[self setBackgroundImage];
+    [self BackbuttonSet];
     [self setConstantsAndFonts]; //setConstantsAndFonts
     [self navigationColorSet];
     _dataFetch = [[DataFetch alloc]init];
     _dataFetch.delegate = self;
-
+    
+    
 
 }
 
@@ -44,11 +57,13 @@
 
 -(void)setConstantsAndFonts{
     if (IS_IPAD) {
+        
         logoHeghtLayout.constant = 140;
         logoWeightLayout.constant = 140;
         textFieldWidthLayout.constant = 600.0f;
 
      }else if(IS_IPHONE_6P){
+         
         logoHeghtLayout.constant = 110;
         logoWeightLayout.constant = 110;
          textFieldWidthLayout.constant = 315.0f;
@@ -68,11 +83,126 @@
         NSLog(@"iPhone X");
         
     }else{
+        
         logoHeghtLayout.constant = 70;
         logoWeightLayout.constant = 70;
         textFieldWidthLayout.constant = 260.0f;
 
     }
+}
+
+- (IBAction)btnFbLoginAction:(UIButton *)sender {
+    
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login
+     logInWithReadPermissions: @[@"public_profile", @"email"]
+     fromViewController:self
+     handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+         if (error) {
+             NSLog(@"Process error");
+         } else if (result.isCancelled) {
+             NSLog(@"Cancelled");
+         }else if (result.token)
+         {
+             // Token created successfully and you are ready to get profile info
+             [self getFacebookProfileInfos];
+             
+         } else{
+             NSLog(@"Logged in");
+             [self getFacebookProfileInfos];
+         }
+     }];
+    
+}
+- (IBAction)btnGmailLoginAction:(UIButton *)sender {
+    
+    [GIDSignIn sharedInstance].delegate = self;
+    [GIDSignIn sharedInstance].uiDelegate = self;
+    [[GIDSignIn sharedInstance] signIn];
+    
+    
+}
+
+#pragma mark - Google SignIn Delegate
+
+- (void)signIn:(GIDSignIn *)signIn didDisconnectWithUser:(GIDGoogleUser *)user withError:(NSError *)error {
+    // Perform any operations when the user disconnects from app here.
+}
+
+- (void)signInWillDispatch:(GIDSignIn *)signIn error:(NSError *)error {
+    
+}
+// Present a view that prompts the user to sign in with Google
+
+- (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
+{
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+// Dismiss the "Sign in with Google" view
+
+- (void)signIn:(GIDSignIn *)signIn dismissViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+//completed sign In
+- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user
+     withError:(NSError *)error {
+    //user signed in
+    //get user data in "user" (GIDGoogleUser object)
+    
+    if (error) {
+        //TODO: handle error
+    } else {
+        NSString *userId   = user.userID;
+        NSString *fullName = user.profile.name;
+        NSString *email    = user.profile.email;
+        NSURL *imageURL    = [user.profile imageURLWithDimension:1024];
+        NSString *accessToken = user.authentication.accessToken; //Use this access token in Google+ API calls.
+        NSLog(@"Email:%@",email);
+        NSLog(@"userId:%@",userId);
+        
+        fbID = userId;
+        fbName = fullName;
+        fbEmail = email;
+        [self fbandGplusLogin];
+        
+    }
+    
+}
+
+#pragma FaceBook Delegate
+
+-(void)getFacebookProfileInfos {
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"email,first_name,last_name,picture,name"}]
+         startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSLog(@"user:%@", result);
+                 NSLog(@"Email:%@", [result objectForKey:@"email"]);
+                 self->fbID = [result objectForKey:@"id"];
+                 self->fbEmail = [result objectForKey:@"email"];
+                 self->fbName = [result objectForKey:@"name"];
+                 [self fbandGplusLogin];
+             }
+         }];
+    }
+    
+}
+
+-(void)fbandGplusLogin{
+    
+    [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    NSDictionary *loginDic = @{@"actiontype":@"fb_login",
+                               @"fb_id":fbID,
+                               @"name":fbName,
+                               @"email":fbEmail,
+                               @"first_name":@"",
+                               @"image":@"",
+                               };
+    NSLog(@"%@",loginDic);
+    [_dataFetch requestURL:KBaseUrl method:@"POST" dic:loginDic from:@"sendFB&GMAILLoginData" type:@"json"];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,6 +212,8 @@
 #pragma mark NavigationColor Set
 
 -(void)navigationColorSet{
+    
+    self.navigationItem.hidesBackButton = YES;
     
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
@@ -230,6 +362,7 @@
     [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
     
     NSLog(@"%@",data1);
+    
     if ([JsonFor isEqual:@"sendLoginData"]) {
         if ([[data1 objectForKey:@"status"] isEqual:@"yes"]) {
             
@@ -253,6 +386,27 @@
         }else{
             [self setAlertMessage:@"Password Sent!" :@"Password has been sent to your email."];
         }
+    } else if([JsonFor isEqual:@"sendFB&GMAILLoginData"]){
+        
+        //[self.navigationController popToRootViewControllerAnimated:YES];
+        
+        if ([[data1 objectForKey:@"status"] isEqual:@"yes"]){
+
+            [[NSUserDefaults standardUserDefaults] setObject:[data1 objectForKey:@"data"] forKey:@"loginDetails"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            if ([[[data1 objectForKey:@"data"]valueForKey:@"user_type"] isEqual:@"user"]) {
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                [self setAlertMessage:@"Oops!" :@"Something Wrong..Please try again"];
+            }
+
+
+        }else{
+
+            [self setAlertMessage:@"Oops!" :@"Something Wrong..Please try again"];
+        }
+        
     }
     
 }

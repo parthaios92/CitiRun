@@ -45,7 +45,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
+    
+    [self BackbuttonSet];
     
     transView = [[UIView alloc] initWithFrame:self.view.bounds];
 
@@ -83,7 +86,6 @@
         }else{
             cartViewHeghtLayout.constant = 120*height+50;
         }
-
         
     }else if(IS_IPHONE_6){
         totalViewHeightLayout.constant = 220;
@@ -103,6 +105,7 @@
             cartViewHeghtLayout.constant = 120*height+50;
         }
     }else{
+        
         totalViewHeightLayout.constant = 220;
 
     }
@@ -113,9 +116,12 @@
 
 -(void)navigationColorSet{
     
+    self.navigationItem.hidesBackButton = YES;
+    
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -151,7 +157,6 @@
         cell.backgroundColor = cell.contentView.backgroundColor;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        
         //Setting For incrememnt
         cell.btnIncrement.tag = indexPath.row;
         [cell.btnIncrement addTarget:self action:@selector(incrementMethod:) forControlEvents:UIControlEventTouchUpInside];
@@ -176,9 +181,9 @@
         }
         
         cell.lblProductName.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"name"];
-        cell.txtProductCount.text = [NSString stringWithFormat:@"%@",[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"amount"]];
+//        cell.txtProductCount.text = [NSString stringWithFormat:@"%@",[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"quantity"]];
         cell.lblPrice.text = [NSString stringWithFormat:@"$%@",[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"price"]];
-        cell.lblCategory.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"category"];
+        cell.lblCategory.text = [NSString stringWithFormat:@"%@",[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"quantity"]]; //quantity
         [cell.productImg sd_setImageWithURL:[NSURL URLWithString:[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"image"]]];
 
         return cell;
@@ -230,7 +235,6 @@
     
 }
 
-
 #pragma mark - Show Menu Action
 
 -(void)showMenuAction:(id)sender{
@@ -243,13 +247,14 @@
     
     NSLog(@"Delete Tag %ld",(long)[sender tag]);
     
-//    NSString *productID = [[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"product_id"];
+//  NSString *productID = [[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"product_id"];
     
     NSString *productID = [NSString stringWithFormat:@"%@",[[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"store_id"]];
     NSLog(@"%@",productID);
     NSLog(@"%@",[[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"cart_id"]);
 
     [self deleteCartValueWithCartId:[[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"cart_id"] productId:productID];
+    
 }
 
 #pragma mark - Increment Method
@@ -271,7 +276,7 @@
     
     NSString *qty = [[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"amount"];
     NSString *productID = [[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"product_id"];
-//    NSString *pStatus = @"decrement";
+    //    NSString *pStatus = @"decrement";
     NSString *pStatus;
     NSLog(@"%@",[[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"amount"]);
     if (([[[[dataDic objectForKey:@"data"] objectAtIndex:[sender tag]] valueForKey:@"amount"] integerValue] != 1)) {
@@ -297,7 +302,7 @@
                       duration:0.2
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^{
-                        //                        [self.view setAlpha:0.5];
+                        //  [self.view setAlpha:0.5];
                         [self.view addSubview:iam21View];
                     } completion:nil];
 }
@@ -328,6 +333,7 @@
     }
 }
 - (IBAction)btnProceedAction:(id)sender {
+    
     if (btn21.selected) {
         // [self.view setAlpha:1.0];
         [transView removeFromSuperview];
@@ -383,13 +389,12 @@
     
     [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     
-    
-    
     NSString *uniqueIdentifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     NSLog(@"%@",uniqueIdentifier);
     
 //    NSLog(@"dev id:%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"deviceID"]);
 //    NSLog(@"dev id: %@",deviceToken);
+    
     NSLog(@"user id:%@",[[[NSUserDefaults standardUserDefaults] valueForKey:@"loginDetails"] valueForKey:@"user_id"]);
     
     NSDictionary *cartDic = @{@"actiontype":@"fetch_cart",
@@ -434,8 +439,11 @@
     [_dataFetch requestURL:KBaseUrl method:@"POST" dic:chabgeDic from:@"changeCartValues" type:@"json"];
     
 }
+
 #pragma mark - Process Successful
+
 - (void) processSuccessful :(NSDictionary *)data1 :(NSString *)JsonFor{
+    
     NSLog(@"%@",data1);
     
     [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];

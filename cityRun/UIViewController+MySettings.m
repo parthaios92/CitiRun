@@ -10,6 +10,25 @@
 
 @implementation UIViewController (MySettings)
 
+-(void)BackbuttonSet
+{
+    
+    UIBarButtonItem *_btn=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"arr"]
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self
+                                                         action:@selector(yourMethod)];
+    
+    self.navigationItem.leftBarButtonItem=_btn;
+    
+    
+}
+
+-(void)yourMethod{
+    
+    NSLog(@"Great");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)setBackgroundImage
 {
     UIGraphicsBeginImageContext(self.view.frame.size);

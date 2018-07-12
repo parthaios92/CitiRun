@@ -38,12 +38,25 @@
     // Do any additional setup after loading the view.
     self.title = @"Edit Profile";
     [self setConstantsAndFonts];
-    [self setBackgroundImage];
+    
+    //[self setBackgroundImage];
+    [self navigationColorSet];
+    [self BackbuttonSet];
     
     _dataFetch = [[DataFetch alloc]init];
     _dataFetch.delegate = self;
 
     [self getProfileDetailsMethod];
+}
+
+#pragma mark NavigationColor Set
+
+-(void)navigationColorSet{
+    
+    self.navigationItem.hidesBackButton = YES;
+    UINavigationBar *bar = [self.navigationController navigationBar];
+    [bar setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
 }
 
 #pragma mark - Set Constants And Fonts

@@ -7,10 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @import GoogleMaps;
+@import GoogleSignIn;
 
-@interface AppDelegate ()
+@interface AppDelegate ()<GIDSignInDelegate>
 @end
 
 @implementation AppDelegate
@@ -19,12 +21,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    //Just Check
     
-    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, 10, 10);
-    UIImage *backArrowImage = [[UIImage imageNamed:@"arr"] imageWithAlignmentRectInsets:insets];
+    [GIDSignIn sharedInstance].clientID = @"1065610316489-1il7alar9dpisb28j40be1mhu4bj8uk1.apps.googleusercontent.com";
+    [GIDSignIn sharedInstance].delegate = self;
     
-    [[UINavigationBar appearance] setBackIndicatorImage:backArrowImage];
-    [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:backArrowImage];
+    [[FBSDKApplicationDelegate sharedInstance] application:application
+                             didFinishLaunchingWithOptions:launchOptions];
     
     [GMSServices provideAPIKey:@"AIzaSyD0XDzIuhYrdIcXGXinc5Lsjd-av0BcaYM"];
 
@@ -54,6 +57,37 @@
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
+    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                  openURL:url
+                                                        sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                               annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+                    ];
+    
+//    [[GIDSignIn sharedInstance] handleURL:url
+//                        sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+//                               annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    
+    
+    return handled;
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    
+    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                  openURL:url
+                                                        sourceApplication:sourceApplication
+                                                               annotation:annotation
+                    ];
+    // Add any custom logic here.
+    return handled;
+}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

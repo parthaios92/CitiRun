@@ -58,7 +58,8 @@
     IBOutlet ACFloatingTextFieldOriginal *txtCountry;
     IBOutlet ACFloatingTextFieldOriginal *txtCity;
     IBOutlet ACFloatingTextFieldOriginal *txtZip;
-    IBOutlet ACFloatingTextField *txtStoreDesc;
+    IBOutlet ACFloatingTextFieldOriginal *txtStoreDesc;
+    
     
     IBOutlet UILabel *lblStoreImageName;
     
@@ -66,10 +67,11 @@
     IBOutlet UIView *storeTypeView;
     IBOutlet UITableView *storeTypeTable;
     
+    IBOutlet NSLayoutConstraint *storeOwnerbtnTConstraint;
+    
     NSData *imagedata;
     NSString* picStr;
     NSString *path;
-    
     
     UIImageView *dummyImage;
     
@@ -80,6 +82,7 @@
 #define URL  @"http://www.appsforcompany.com/citirun/app/upload_image.php"  // change this URL
 #define NO_CONNECTION  @"No Connection"
 #define NO_IMAGE      @"NO IMAGE SELECTED"
+    
 }
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -94,7 +97,7 @@
     
     self.title = @"Signup";
     selectedTab = @"user";
-//    [self setBackgroundImage];
+    [self BackbuttonSet];
     
     lblStoreImageName.layer.borderWidth = 1.0;
     lblStoreImageName.layer.borderColor = [UIColor darkGrayColor].CGColor;
@@ -124,6 +127,7 @@
 
 -(void)navigationColorSet{
     
+    self.navigationItem.hidesBackButton = YES;
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
@@ -133,6 +137,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 #pragma mark - Set Constants And Fonts
 
 -(void)setConstantsAndFonts{
@@ -140,6 +145,7 @@
     if (IS_IPAD) {
         
         weightLayoutOfTextField1.constant = 600.0f;
+        //storeOwnerbtnTConstraint.constant = 70.0f;
 
     }else if(IS_IPHONE_6P){
        
@@ -155,7 +161,8 @@
 
     }else if (IS_IPHONE_X){
         
-        NSLog(@"iPhone X");
+        //weightLayoutOfTextField1.constant = 260.0f;
+        //storeOwnerbtnTConstraint.constant = 88.0f;
         
     }else{
        
@@ -169,29 +176,33 @@
 {
     UIGraphicsBeginImageContext(self.view.frame.size);
     if (IS_IPAD) {
-        signupBG2.image = [UIImage imageNamed:@"tab-bg.jpg"];
         
+        signupBG2.image = [UIImage imageNamed:@"tab-bg.jpg"];
         topLayoutOfTextFiled1.constant = -214.0f;
         topLayoutOfTextFiled.constant = 50.0f;
         weightLayoutOfTextField.constant = 600.0f;
         
         
     }else if(IS_IPHONE_6P){
+        
         signupBG2.image = [UIImage imageNamed:@"app-bg-innar.jpg"];
         weightLayoutOfTextField.constant = 330.0f;
         weightLayoutOfTextField1.constant = 330.0f;
         
     }else if(IS_IPHONE_6){
+        
         signupBG2.image = [UIImage imageNamed:@"app-bg-innar.jpg"];
         weightLayoutOfTextField.constant = 300.0f;
         weightLayoutOfTextField1.constant = 300.0f;
         
     }else if (IS_IPHONE_5){
+        
         signupBG2.image = [UIImage imageNamed:@"app-bg-innar.jpg"];
         weightLayoutOfTextField.constant = 280.0f;
         weightLayoutOfTextField1.constant = 280.0f;
 
     }else{
+        
         signupBG2.image = [UIImage imageNamed:@"app-bg-innar.jpg"];
         weightLayoutOfTextField.constant = 260.0f;
         weightLayoutOfTextField1.constant = 260.0f;
@@ -214,10 +225,12 @@
         
         if (txtPassword.text == txtConfirmpassword.text) {
             if ([self validateEmailWithString:txtEmail.text]) {
+                
                 NSLog(@"%@",[self validateEmailWithString:txtEmail.text]? @"Yes" : @"No");
                 [self sendSignupData];
                 
             }else{
+                
                 NSLog(@"%@",[self validateEmailWithString:txtEmail.text]? @"Yes" : @"No");
                 [self setAlertMessage:@"Error!" :@"Please enter valid email address and password."];
                 
@@ -251,17 +264,13 @@
 }
 - (IBAction)btnSignupStoreOwner:(id)sender {
     
-    
     if (IS_IPHONE_X)  {
        
-         storeOwnerTopConstraint.constant = 88.0f;
+         storeOwnerbtnTConstraint.constant = 88.0f;
         
-    }else if(IS_IPAD){
-        
-       // storeOwnerTopConstraint.constant =100.0f;
     }else{
         
-       storeOwnerTopConstraint.constant = 64.0f;
+         storeOwnerbtnTConstraint.constant = 64.0f;
     }
     
     [btnUser1 setBackgroundColor:[UIColor whiteColor]];
@@ -281,9 +290,11 @@
         if (txtStoreName.text.length > 0 && txtStoreType.text.length > 0 && txtZip.text.length && txtAddress.text.length > 0) {
             
             pageUser.hidden = NO;
+            
 //            [btnSignup1 setBackgroundImage:[UIImage imageNamed:@"btn-active.jpg"] forState:UIControlStateNormal];
 //            [btnUser1 setBackgroundImage:nil forState:UIControlStateNormal];
 //            btnUser1.backgroundColor = [UIColor colorWithRed:60/256.0 green:173/256.0 blue:139/256.0 alpha:1.0];
+            
             storeOwnerView.hidden = YES;
             
         }else{
@@ -340,8 +351,7 @@
         UIImagePickerController *imagePicker =
         [[UIImagePickerController alloc] init];
         imagePicker.delegate = self;
-        imagePicker.sourceType =
-        UIImagePickerControllerSourceTypeCamera;
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
         imagePicker.allowsEditing = NO;
         [self presentViewController:imagePicker
@@ -363,6 +373,7 @@
                            animated:YES completion:nil];
     }
 }
+
 #pragma mark - Get Photo From Library
 -(void)getPhotoFromLibrary{
     
@@ -391,20 +402,20 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *localFilePath = [documentsDirectory stringByAppendingPathComponent:@","];
     [webData writeToFile:localFilePath atomically:YES];
-    NSLog(@"localFilePath.%@",localFilePath);
-   
-    //  [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"localFilePath:%@",localFilePath);
+    lblStoreImageName.text = localFilePath;
+    [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+//   [self dismissViewControllerAnimated:YES completion:nil];
     [self dismissViewControllerAnimated:YES completion:^{
-        
+
         [self setParams];
     }];
-    
-    
     
     
 }
 
 #pragma mark - Cropper Delegate -
+
 //- (void)cropViewController:(TOCropViewController *)cropViewController didCropToImage:(UIImage *)image withRect:(CGRect)cropRect angle:(NSInteger)angle
 //{
 //
@@ -419,7 +430,7 @@
 //    [cropViewController dismissAnimatedFromParentViewController:self withCroppedImage:image toFrame:viewFrame completion:^{
 //        //_imageView.hidden = NO;
 //    }];
-//    [self uploadImage];
+//    [self setParams];
 //
 //}
 
@@ -431,7 +442,6 @@
 -(void) setParams{
     
     if(pngData != nil){
-        
         
         request = [NSMutableURLRequest new];
         request.timeoutInterval = 20.0;
@@ -447,7 +457,7 @@
         NSMutableData *body = [NSMutableData data];
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
         
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@.png\"\r\n", @"file"] dataUsingEncoding:NSUTF8StringEncoding]]; //%@.png\"\r\n
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", @"file"] dataUsingEncoding:NSUTF8StringEncoding]]; //%@.png\"\r\n
         
         [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
         
@@ -459,7 +469,7 @@
         [request setHTTPBody:body];
         [request addValue:[NSString stringWithFormat:@"%lu", (unsigned long)[body length]] forHTTPHeaderField:@"Content-Length"];
         
-        //========
+        //========//
         
         NSError *error = nil;
         NSURLResponse *responseStr = nil;
@@ -472,36 +482,44 @@
           NSLog(@"%@", syncResData);
         
         if(error == nil){
+            
+            [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
             // response.text = returnString;
             NSLog(@"%@",returnString);
-//            NSArray *items = [returnString componentsSeparatedByString:@","];
-//            NSString *str1=[items objectAtIndex:0];
-//            //take the one array for split the string
-//            NSArray *items1 = [str1 componentsSeparatedByString:@"{"];
-//            NSString *str2=[items1 objectAtIndex:1];
-//
-//            NSLog(@"%@",str1);
-//            NSLog(@"%@",str2);
-//
-//            uploadImageStr = str2;
-//            NSLog(@"%@",uploadImageStr);
-//            //  _uploadImage.image = dummyImage.image;
-//            //[imageLoadActivetor stopAnimating];
             
+            NSArray *items = [returnString componentsSeparatedByString:@","];
+            NSString *str1=[items objectAtIndex:0];
+            //take the one array for split the string
+            NSArray *items1 = [str1 componentsSeparatedByString:@"{"];
+            NSString *str2=[items1 objectAtIndex:1];
+            
+            //take the Message String Only
+            NSArray *items2 = [str2 componentsSeparatedByString:@":"];
+            NSString *str3=[items2 objectAtIndex:1];
+
+            NSLog(@"%@",str1);
+            NSLog(@"%@",str2);
+            NSLog(@"%@",str3);
+            
+            //Remove String Double Coutetion "".....
+            NSCharacterSet *quoteCharset = [NSCharacterSet characterSetWithCharactersInString:@"\""];
+            NSString *trimmedString = [str3 stringByTrimmingCharactersInSet:quoteCharset];
+            
+            NSLog(@"%@",trimmedString);
+
+            uploadImageStr = trimmedString;
+            NSLog(@"%@",uploadImageStr);
+
         }
         
-        
-        //=======
+        //=======//
         // return TRUE;
         
     }else{
         
-        //   response.text = NO_IMAGE;
+        [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
         
-        //  return FALSE;
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Alert .. " message:@"Image does not uploaded...,try  again.." preferredStyle:UIAlertControllerStyleAlert];
-        
-        
         
         
         UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK"
@@ -509,16 +527,16 @@
                                                    handler:nil];
         [alertController addAction:ok];
         
-        //        [HUD hideUIBlockingIndicator];
+        //  [HUD hideUIBlockingIndicator];
         
         [self presentViewController:alertController animated:YES completion:nil];
         
     }
-    // [HUD hideUIBlockingIndicator];
+    
 }
 
-
 -(void)sendSignupData{
+    
     [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     
     NSDictionary *signupDic = [[NSDictionary alloc] init];
@@ -533,7 +551,16 @@
             typeStr = @"3";
         }
         
-        if (txtStoreName.text.length > 0 && txtStoreType.text.length > 0 && txtZip.text.length > 0) {
+        if ([uploadImageStr isEqualToString:@""]){
+            
+            uploadImageStr = @"";
+        }else{
+            
+            NSLog(@"%@",uploadImageStr);
+        }
+        
+        if (txtStoreName.text.length > 0 && txtStoreType.text.length > 0 && txtZip.text.length > 0 && txtStoreDesc.text.length > 0) {
+            
             signupDic = @{@"actiontype":@"signup_store",
                           @"fullname":txtFullname.text,
                           @"email":txtEmail.text,
@@ -545,7 +572,10 @@
                           @"country":txtCountry.text,
                           @"city":txtCity.text,
                           @"zip":txtZip.text,
+                          @"image":uploadImageStr,
+                          @"description":txtStoreDesc.text,
                           };
+           
         }else{
             [self setAlertMessage:@"Empty Fields!" :@"Please fill the empty fields."];
         }
@@ -621,13 +651,18 @@
 #pragma mark  UITextfield Delegates
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
     if (textField.tag == 99)
     {
         [self.view endEditing:YES];
         [textField resignFirstResponder];
         [storeTypeView setHidden:NO];
+        
+    }else if (textField.tag == 100 || textField.tag == 101) {
+        
+        [self.view setFrame:CGRectMake(0,-190,self.view.frame.size.width,self.view.frame.size.height)];
     }
-    [self.view setFrame:CGRectMake(0,-120,self.view.frame.size.width,self.view.frame.size.height)];
+    
     
 }
 
@@ -643,6 +678,7 @@
     {
         storeTypeView.hidden = NO;
         storeTypeView.frame = CGRectMake(txtStoreType.frame.origin.x, txtStoreType.frame.origin.y+txtStoreType.frame.size.height+2, txtStoreType.frame.size.width, [self autocompleteViewHeight]);
+//        storeTypeView.frame = CGRectMake(storeOwnerView.frame.size.width/2, storeOwnerView.frame.size.height/2, txtStoreType.frame.size.width, [self autocompleteViewHeight]);
         [storeOwnerView addSubview:storeTypeView];
         [self setShadowToAutocompleteView];
     }
@@ -652,6 +688,7 @@
 }
 
 -(void)setShadowToAutocompleteView{
+    
     storeTypeView.layer.masksToBounds = NO;
     storeTypeView.layer.shadowOffset = CGSizeMake(1, 2);
     storeTypeView.layer.cornerRadius = 10.0f;

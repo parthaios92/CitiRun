@@ -12,9 +12,10 @@
 #import "ProductUploadViewController.h"
 @interface StoreOwnerProductViewController ()<ProcessDataDelegate>
 {
-    //    Create object of DataFetch
+    //  Create object of DataFetch
     DataFetch *_dataFetch;
     NSDictionary* dataDic;
+    NSArray *fetchDataArray;
 
     IBOutlet UITableView *myProductTable;
 }
@@ -30,10 +31,27 @@
     _dataFetch.delegate = self;
 
     self.title = @"My Products";
-    [self setBackgroundImage];
+    //[self setBackgroundImage];
+    [self BackbuttonSet];
     [self fetchProductData];
 
 
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [self navigationColorSet];
+}
+
+#pragma mark NavigationColor Set
+
+-(void)navigationColorSet{
+    
+    self.navigationItem.hidesBackButton = YES;
+    UINavigationBar *bar = [self.navigationController navigationBar];
+    [bar setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,25 +64,28 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [[[dataDic objectForKey:@"data"] valueForKey:@"id"] count];
+    return fetchDataArray.count; //[[[dataDic objectForKey:@"data"] valueForKey:@"id"] count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-        StoreOwnerProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StoreOwnerProductTableViewCell" forIndexPath:indexPath];
+    StoreOwnerProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StoreOwnerProductTableViewCell" forIndexPath:indexPath];
     
     [cell.productImgView sd_setImageWithURL:[NSURL URLWithString:[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"iamge"]]];
-//    [cell.productImgView sd_setImageWithURL:[NSURL URLWithString:@"www.appsforcompany.com/citirun/app/images/images.jpg"]];
     
-    cell.lblProductName.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"productname"];
-    cell.lblPrice.text =[NSString stringWithFormat:@"$%@",[[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"price"]];
-    cell.lblQty.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"quantity"];
-    cell.lblCategory.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"category"];
-    cell.lblSubCategory.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"sub_category"];
-
+   //  [cell.productImgView sd_setImageWithURL:[NSURL URLWithString:@"www.appsforcompany.com/citirun/app/images/images.jpg"]];
+    
+    cell.lblProductName.text = [[fetchDataArray objectAtIndex:indexPath.row] valueForKey:@"productname"];
+    cell.lblPrice.text =[NSString stringWithFormat:@"$%@",[[fetchDataArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
+    cell.lblQty.text =[NSString stringWithFormat:@"%@",[[fetchDataArray objectAtIndex:indexPath.row] valueForKey:@"quantity"]];
+    
+    //    cell.lblQty.text = [[fetchDataArray objectAtIndex:indexPath.row] valueForKey:@"quantity"];
+    //    cell.lblCategory.text = [[fetchDataArray objectAtIndex:indexPath.row] valueForKey:@"category"];
+    //    cell.lblSubCategory.text = [[[dataDic objectForKey:@"data"] objectAtIndex:indexPath.row] valueForKey:@"sub_category"];
     
         return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -88,7 +109,6 @@
     }];
     deleteAction.backgroundColor = [UIColor colorWithRed:62/256.0 green:178/256.0 blue:143/256.0 alpha:1.0];
     
-    
     UITableViewRowAction *disableAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Disable"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
         //insert your deleteAction here
         NSLog(@"Disable");
@@ -101,6 +121,7 @@
     
     StoreOwnerOrderViewController * orderVC = [self.storyboard instantiateViewControllerWithIdentifier:@"StoreOwnerOrderViewController"];
     [self presentViewController:orderVC animated:YES completion:nil];
+    
 }
 
 - (IBAction)btnAddNewProductAction:(id)sender {
@@ -109,18 +130,19 @@
 }
 
 -(void)fetchProductData{
+    
     [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     
     NSDictionary* getProductDic = @{@"actiontype":@"product_list",
                                     @"user_id":[[[NSUserDefaults standardUserDefaults] valueForKey:@"loginDetails"] valueForKey:@"user_id"]
                                   };
-    
     NSLog(@"%@",getProductDic);
     [_dataFetch requestURL:KBaseUrl method:@"POST" dic:getProductDic from:@"fetchProductData" type:@"json"];
     
 }
 
 #pragma mark - Process Successful
+
 - (void) processSuccessful :(NSDictionary *)data1 :(NSString *)JsonFor{
     
     [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
@@ -132,15 +154,19 @@
         if ([data1 valueForKey:@"data"] == (id)[NSNull null] || data1 == nil) {
             // tel is null
             NSLog(@"Null value is data");
-            //            [self alertset:@"No Data!" :@"Server not responding please try after sometime"];
+            // [self alertset:@"No Data!" :@"Server not responding please try after sometime"];
             
         }else{
             if ([[data1 objectForKey:@"available"] isEqual:@"yes"]) {
                 
                 dataDic = data1;
+                fetchDataArray = [data1 valueForKey:@"data"];
+                NSLog(@"%@",fetchDataArray);
+                
                 
             }else{
-                //            [self alertset:@"ecoPODIUM App" :@"Server not responding please try after sometime"];
+                
+                //  [self alertset:@"ecoPODIUM App" :@"Server not responding please try after sometime"];
             }
             [myProductTable reloadData];
             

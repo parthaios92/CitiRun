@@ -27,8 +27,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self BackbuttonSet];
     self.title = @"Help Center";
-    txtViewMessage.placeholder = @"Message";
+    //txtViewMessage.placeholder = @"Message";
+    txtViewMessage.text = @"Your Message..";
+    txtViewMessage.textColor = [UIColor darkGrayColor];
     txtViewMessage.delegate = self;
     _dataFetch = [[DataFetch alloc]init];
     _dataFetch.delegate = self;
@@ -56,6 +59,7 @@
 
 -(void)navigationColorSet{
     
+    self.navigationItem.hidesBackButton = YES;
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
@@ -85,6 +89,34 @@
     
     return YES;
 }
+
+- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
+{
+    txtViewMessage.text = @"";
+    txtViewMessage.textColor = [UIColor darkGrayColor];
+    return YES;
+}
+
+-(void) textViewDidChange:(UITextView *)textView
+{
+    
+    if(txtViewMessage.text.length == 0){
+        txtViewMessage.textColor = [UIColor darkGrayColor];
+        txtViewMessage.text = @"Your Message..";
+        [txtViewMessage resignFirstResponder];
+    }
+}
+
+-(void) textViewShouldEndEditing:(UITextView *)textView
+{
+    
+    if(txtViewMessage.text.length == 0){
+        txtViewMessage.textColor = [UIColor darkGrayColor];
+        txtViewMessage.text = @"Your Message..";
+        [txtViewMessage resignFirstResponder];
+    }
+}
+
 
 -(void)contactUsMethod{
     

@@ -12,7 +12,7 @@
 #import "CartViewController.h"
 #import <coreLocation/CoreLocation.h>
 
-@interface RestaurantListingViewController ()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,CLLocationManagerDelegate,ProcessDataDelegate>{
+@interface RestaurantListingViewController ()<UITableViewDataSource, UITableViewDelegate,UITextFieldDelegate,CLLocationManagerDelegate,ProcessDataDelegate,UISearchBarDelegate>{
     
     IBOutlet UITableView *tableViewRestaurant;
     
@@ -26,6 +26,12 @@
     
     NSString *longitude;
     NSString *latitude;
+    
+    NSString *stringSearch;
+    
+    NSMutableArray *arrayTableData;
+    NSMutableArray *arraySearchContactData;
+    
 }
 
 @end
@@ -35,6 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self BackbuttonSet];
    
     locationManager = [[CLLocationManager alloc] init];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -59,6 +66,7 @@
 
 -(void)cutomNavigation{
     
+    self.navigationItem.hidesBackButton = YES;
     
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
@@ -79,6 +87,7 @@
     UIBarButtonItem *mailbutton =[[UIBarButtonItem alloc] initWithCustomView:someButton];
     self.navigationItem.rightBarButtonItem=mailbutton;
     
+   /*
     searchTextField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width/2, 30.0)];
     //textField.layer.borderWidth = 1.0;
     //textField.layer.borderColor = [UIColor darkGrayColor].CGColor;
@@ -86,10 +95,31 @@
     searchTextField.placeholder = @"Search Here..";
     [searchTextField setTextAlignment:NSTextAlignmentCenter];
     searchTextField.backgroundColor = [UIColor whiteColor];
+    [searchTextField setTintColor:[UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0]];
+    searchTextField.textColor = [UIColor darkGrayColor];
     //textField.background=[UIImage imageNamed:@"textFieldImage.png"];
     self.navigationItem.titleView = searchTextField;
     searchTextField.delegate = self;
-   
+    */
+    
+    //Set Navigation Search Bar...
+    _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0,
+                                                            self.navigationController.navigationBar.frame.size.width/2,
+                                                               self.navigationController.navigationBar.bounds.size.height)];
+    _searchBar.tintColor = [UIColor blueColor];
+    
+    _searchBar.placeholder = @"Search Here..";
+    _searchBar.barTintColor = [UIColor clearColor];
+    
+    searchTextField = [_searchBar valueForKey:@"_searchField"];
+    searchTextField.backgroundColor = [UIColor whiteColor];
+    searchTextField.tintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
+    searchTextField.textColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
+    _searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _searchBar.delegate = self;
+    _searchBar.showsCancelButton = NO;
+   // [_searchBar becomeFirstResponder];
+    self.navigationItem.titleView = _searchBar;
     
 }
 
@@ -108,6 +138,7 @@
     CLLocation *currentLocation = newLocation;
     
     if (currentLocation != nil) {
+        
         longitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.longitude];
         latitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.latitude];
         
@@ -127,7 +158,6 @@
     NSLog(@"%@",listDic);
     [_dataFetch requestURL:KBaseUrl method:@"POST" dic:listDic from:@"listValue" type:@"json"];
 
-    
 }
 
 -(void)Cart{
@@ -157,7 +187,7 @@
     return YES;
 }
 
-#pragma SearChing Restaurent With Name:
+#pragma Searching Restaurent With Name:
 
 -(void)SearchRestaurent{
     
@@ -168,8 +198,53 @@
                               };
     NSLog(@"%@",searchDic);
     [_dataFetch requestURL:KBaseUrl method:@"POST" dic:searchDic from:@"SearchItem" type:@"json"];
+    
 }
 
+#pragma mark - SearchBar Delegate Methods
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if ([searchText isEqualToString:@""]){
+        
+        [searchBar performSelector:@selector(resignFirstResponder)
+                        withObject:nil
+                        afterDelay:0];
+        [self SearchRestaurent];
+        
+    }else{
+        
+        [self SearchRestaurent];
+    }
+    
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)SearchBar
+{
+    [_searchBar becomeFirstResponder];
+    SearchBar.showsCancelButton=NO;
+    
+}
+- (void)searchBarTextDidEndEditing:(UISearchBar *)theSearchBar
+{
+    [theSearchBar resignFirstResponder];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)SearchBar
+{
+    @try
+    {
+        SearchBar.showsCancelButton=NO;
+        [SearchBar resignFirstResponder];
+        [tableViewRestaurant reloadData];
+    }
+    @catch (NSException *exception) {
+    }
+}
+- (void)searchBarSearchButtonClicked:(UISearchBar *)SearchBar
+{
+    [SearchBar resignFirstResponder];
+}
 
 
 #pragma mark - UITableViewDataSource
@@ -183,6 +258,10 @@
     
     cell.cellView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     cell.cellView.layer.borderWidth = 1;
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    // NSString *imageAttached = [NSString stringWithFormat: @"http://www.appsforcompany.com/citirun/app/uploads/%@", [[restaurantListingArray objectAtIndex:indexPath.row] valueForKey:@"image"]];
     
     [cell.storeImage sd_setImageWithURL:[NSURL URLWithString:[[restaurantListingArray objectAtIndex:indexPath.row] valueForKey:@"image"]]];
     cell.lblStoreName.text = [[restaurantListingArray objectAtIndex:indexPath.row] valueForKey:@"store_name"];
@@ -228,6 +307,7 @@
             restaurantListingArray=[dataDic objectForKey:@"data"];
             
             //NSLog(@"%lu,%@",(unsigned long)restaurantListingArray.count,[dataDic objectForKey:@"data"]);
+            
             [tableViewRestaurant reloadData];
             
         }else{
@@ -244,11 +324,12 @@
             restaurantListingArray=[dataDic objectForKey:@"data"];
             
             //NSLog(@"%lu,%@",(unsigned long)restaurantListingArray.count,[dataDic objectForKey:@"data"]);
+            
             [tableViewRestaurant reloadData];
             
         }else{
             
-            
+            [self setAlertMessage:@"Not Match!!" :@"Search item not match.."];
         }
         
     }

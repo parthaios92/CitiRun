@@ -31,6 +31,7 @@
     self.title = @"My Orders";
     //[self setBackgroundImage];
     [self navigationColorSet];
+    [self BackbuttonSet];
     [self fetchMyOrderDetails];
 }
 
@@ -38,6 +39,7 @@
 
 -(void)navigationColorSet{
     
+    self.navigationItem.hidesBackButton = YES;
     UINavigationBar *bar = [self.navigationController navigationBar];
     [bar setTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:122/255.0 green:175/255.0 blue:72/255.0 alpha:1.0];
@@ -112,13 +114,16 @@
     
     NSString *deviceToken ;
     
+    NSString *uniqueIdentifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    NSLog(@"%@",uniqueIdentifier);
+    
 #if TARGET_IPHONE_SIMULATOR
     
-    deviceToken = @"396dc0b8baa8698843ad2f7e5088039c49da5bffb1171aa7252e9affa53efe21";
+    deviceToken = @"67B71AFD-CF75-473A-A71E-82AC30F10214";
 #else
     
     if ([[NSUserDefaults standardUserDefaults]valueForKey:@"deviceID"] == nil) {
-        deviceToken = @"396dc0b8baa8698843ad2f7e5088039c49da5bffb1171aa7252e9affa53efe21";
+        deviceToken = @"67B71AFD-CF75-473A-A71E-82AC30F10214";
     }else{
         deviceToken = [[NSUserDefaults standardUserDefaults]valueForKey:@"deviceID"];
     }
